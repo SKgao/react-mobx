@@ -1,8 +1,9 @@
 {
     "presets": [
-        [
-            "@babel/env"
-        ]
+        ["@babel/env"],
+        ["@babel/preset-react", {
+            "throwIfNamespace": false
+        }]
     ],
     "plugins": [
         ["@babel/plugin-proposal-decorators", {"legacy": true}],

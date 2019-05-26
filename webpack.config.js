@@ -3,8 +3,9 @@ const path = require('path')
 const config = {
     mode: 'development',
     entry: [
-        path.resolve(__dirname, 'src/index.js'),
+        path.resolve(__dirname, 'src/index.jsx'),
         path.resolve(__dirname, 'src/decorator.js'),
+        path.resolve(__dirname, 'src/observable.js')
     ],
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -13,12 +14,19 @@ const config = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/env'],
+                        presets: [
+                            ['@babel/env'],
+                            ['@babel/preset-react', {
+                                // 'pragma': 'dom',
+                                // 'pragmaFrag': 'DomFrag',
+                                'throwIfNamespace': false
+                            }]
+                        ],
                         plugins: [
                             //装饰器
                             ["@babel/plugin-proposal-decorators", {"legacy": true}],
