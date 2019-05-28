@@ -6,7 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>mobx</title>
     <style type="text/css">
-
+        .input {
+            padding: 15px;
+            border: 1px solid #ccc;
+            font-size: 24px;
+            width: 240px;
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            height: 40px;
+            border: 1px solid #dedede;
+            margin-bottom: 5px;
+        }
+        .todo-item .toggle {
+            margin: 10px;
+        }
+        .todo-item .title {
+            font-size: 24px;
+            color: #333;
+            margin-right: 20px;
+        }
+        .todo-item .title.finished {
+            text-decoration: line-through;
+            color: gray;
+        }
     </style>
 </head>
 <body>
