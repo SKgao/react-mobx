@@ -1,8 +1,11 @@
-import { observable, action, computed } from 'mobx'
+import {spy, trace, toJS, observe, observable, action, computed } from 'mobx'
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import { observer, propTypes as ObservablePropTypes } from 'mobx-react'
+
+// 可监视所有的可观察数据的变动
+// spy(event => console.log(event))
 
 class Todo {
     id = Math.random()
@@ -20,6 +23,29 @@ class Todo {
 
 class Store {
     @observable todos = []
+    disposers = []
+
+    constructor() {
+        // 监视todos的变化
+        observe(this.todos, change => {
+            this.disposers.forEach(cb => cb())
+            this.disposers = []
+            for (let key of change.object) {
+                const disposer = observe(key, changekey => {
+                    console.log(changekey)
+                    this.save()
+                })
+                this.disposers.push(disposer)
+            }
+            console.log('todos changed:', change)
+            this.save()
+        })
+    }
+
+    save() {
+        // toJS() 序列化为原生js数据
+        localStorage.setItem('TODOS', JSON.stringify(toJS(this.todos)))
+    }
 
     @action.bound createTodo(title) {
         this.todos.unshift(new Todo(title))
@@ -67,6 +93,8 @@ class TodoList extends Component {
     }
 
     render() {
+        // trace(true) 可以追踪 react组件的重渲染
+        trace()
         const { store: { todos, left, removeTodo } } = this.props
         return (
             <div className="todo-list">
